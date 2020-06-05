@@ -37,21 +37,27 @@
 console.log("It's working");
 const frag = document.createDocumentFragment();
 const sections = document.querySelectorAll("section");
-for (section of sections) {
+for (const section of sections) {
     let text = section.getAttribute("data-nav");
     let li = document.createElement("li");
     li.innerText = text;
     li.className = "menu__link";
+    li.setAttribute("for-section", section.getAttribute("id"));
     frag.appendChild(li);
 }
-const navlist = document.querySelector("nav ul");
-navlist.appendChild(frag);
+const navList = document.querySelector("#navbar__list");
+navList.appendChild(frag);
 
 // Add class 'active' to section when near top of viewport
 
 
 // Scroll to anchor ID using scrollTO event
-
+//TODO: should I use let or const here?
+for (const navElement of navList.children) {
+    navElement.addEventListener('click', function () {
+        document.querySelector(`#${navElement.getAttribute("for-section")}`).scrollIntoView();
+    });
+}
 
 /**
  * End Main Functions
