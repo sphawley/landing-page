@@ -33,8 +33,7 @@
  * 
 */
 
-// build the nav dynamically
-console.log("It's working");
+// Build the nav dynamically
 const frag = document.createDocumentFragment();
 const sections = document.querySelectorAll("section");
 for (const section of sections) {
@@ -56,6 +55,7 @@ navList.appendChild(frag);
 for (const navElement of navList.children) {
     navElement.addEventListener('click', function () {
         document.querySelector(`#${navElement.getAttribute("for-section")}`).scrollIntoView();
+        window.scrollBy(0, -1 * document.querySelector(".page__header").offsetHeight)
     });
 }
 
