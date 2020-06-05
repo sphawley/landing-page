@@ -33,8 +33,19 @@
  * 
 */
 
-// build the nav
-
+// build the nav dynamically
+console.log("It's working");
+const frag = document.createDocumentFragment();
+const sections = document.querySelectorAll("section");
+for (section of sections) {
+    let text = section.getAttribute("data-nav");
+    let li = document.createElement("li");
+    li.innerText = text;
+    li.className = "menu__link";
+    frag.appendChild(li);
+}
+const navlist = document.querySelector("nav ul");
+navlist.appendChild(frag);
 
 // Add class 'active' to section when near top of viewport
 
