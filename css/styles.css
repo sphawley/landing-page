@@ -83,7 +83,13 @@ section {
 }
 
 .navbar__menu .menu__link:hover {
-    background: #333;
+    background: #666;
+    color: #fff;
+    transition: ease 0.3s all;
+}
+
+.navbar__menu .menu__link.active-menu-link {
+    background: #222;
     color: #fff;
     transition: ease 0.3s all;
 }

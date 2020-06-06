@@ -17,8 +17,9 @@
  * Define Global Variables
  * 
 */
-
-
+const headerHeight = document.querySelector(".page__header").offsetHeight;
+let centerOfViewYCoordinate;
+calculateCenterOfViewYCoordinate();
 /**
  * End Global Variables
  * Start Helper Functions
@@ -44,18 +45,45 @@ for (const section of sections) {
     li.setAttribute("for-section", section.getAttribute("id"));
     frag.appendChild(li);
 }
+frag.firstChild.classList.add("active-menu-link");
 const navList = document.querySelector("#navbar__list");
 navList.appendChild(frag);
 
 // Add class 'active' to section when near top of viewport
+function calculateCenterOfViewYCoordinate() {
+    centerOfViewYCoordinate = Math.round((window.innerHeight - headerHeight)/2 + headerHeight);
+}
 
+function calculateActiveSection() {
+    let activeSection = sections[0];
+    for (const section of sections) {
+        if (centerOfViewYCoordinate > section.getBoundingClientRect().y) {
+            activeSection = section;
+        }
+    }
+    if (activeSection !== document.querySelector("section.your-active-class")) {
+        document.querySelector("section.your-active-class").classList.remove("your-active-class");
+        activeSection.classList.add("your-active-class");
+        document.querySelector(".active-menu-link").classList.remove("active-menu-link");
+        document.querySelector(`[for-section=${activeSection.id}]`).classList.add("active-menu-link");
+    }
+}
+
+window.addEventListener('resize', function() {
+    calculateCenterOfMainYCoordinate();
+    calculateActiveSection();
+});
+
+window.addEventListener('scroll', function() {
+    calculateActiveSection();
+});
 
 // Scroll to anchor ID using scrollTO event
 //TODO: should I use let or const here?
 for (const navElement of navList.children) {
     navElement.addEventListener('click', function () {
         document.querySelector(`#${navElement.getAttribute("for-section")}`).scrollIntoView();
-        window.scrollBy(0, -1 * document.querySelector(".page__header").offsetHeight)
+        window.scrollBy(0, -1 * headerHeight)
     });
 }
 
