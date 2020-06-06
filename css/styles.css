@@ -63,8 +63,9 @@ section {
 /* ---- Module Rules ---- */
 
 /* Navigation Styles*/
-.navbar__menu.hide {
-    display: none;
+.navbar__menu {
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
 }
 
 .navbar__menu ul {

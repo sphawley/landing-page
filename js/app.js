@@ -90,10 +90,12 @@ window.addEventListener('scroll', function() {
 
 let timeoutId;
 function displayNavBar() {
+    console.log("in displayNavBar");
     clearTimeout(timeoutId);
-    document.querySelector(".navbar__menu").classList.remove("hide");
+    let navBar = document.querySelector(".navbar__menu");
+    navBar.style.maxHeight = navBar.scrollHeight + "px";
     timeoutId = setTimeout(function() {
-            document.querySelector(".navbar__menu").classList.add("hide");
+            navBar.style.maxHeight = 0;
         }, 3000);
 }
 
