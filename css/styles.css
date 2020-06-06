@@ -99,6 +99,7 @@ section {
     transition: ease 0.3s all;
 }
 
+/* Collapsible Styles*/
 .collapsible {
     cursor: pointer;
 }

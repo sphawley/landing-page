@@ -1,163 +1,153 @@
 /**
- * 
+ *
  * Manipulating the DOM exercise.
  * Exercise programmatically builds navigation,
  * scrolls to anchors from navigation,
  * and highlights section in viewport upon scrolling.
- * 
+ *
  * Dependencies: None
- * 
+ *
  * JS Version: ES2015/ES6
- * 
+ *
  * JS Standard: ESlint
- * 
-*/
+ *
+ */
 
 /**
  * Define Global Variables
- * 
-*/
+ *
+ */
 
+const frag = document.createDocumentFragment();
+const sections = document.querySelectorAll('section');
+const navList = document.querySelector('#navbar__list');
+const headerHeight = document.querySelector('.page__header').offsetHeight;
+let centerOfViewYCoordinate;
+let timeoutId;
+const collapsibles = document.querySelectorAll('.collapsible');
 
 /**
  * End Global Variables
  * Start Helper Functions
- * 
-*/
+ *
+ */
 
+// Set the active view horizontal line to halfway down the view after the header
+const calculateCurrentlyActiveViewYCoordinate = () => {
+  centerOfViewYCoordinate = Math.round((window.innerHeight - headerHeight) / 2 + headerHeight);
+};
 
+// Calculate and set the active section and corresponding menu link
+const calculateActiveSection = () => {
+  let activeSection = sections[0];
+  for (const section of sections) {
+    if (centerOfViewYCoordinate > section.getBoundingClientRect().y) {
+      activeSection = section;
+    }
+  }
+  if (activeSection !== document.querySelector('section.your-active-class')) {
+    document.querySelector('section.your-active-class').classList.remove('your-active-class');
+    activeSection.classList.add('your-active-class');
+    document.querySelector('.active-menu-link').classList.remove('active-menu-link');
+    document.querySelector(`[for-section=${activeSection.id}]`).classList.add('active-menu-link');
+  }
+};
+
+// Display the nav bar for 3 more seconds
+const displayNavBar = () => {
+  clearTimeout(timeoutId);
+  const navBar = document.querySelector('.navbar__menu');
+  navBar.style.maxHeight = navBar.scrollHeight + 'px';
+  timeoutId = setTimeout(function () {
+    navBar.style.maxHeight = 0;
+  }, 3000);
+};
+
+// Get all siblings of elem
+const getSiblings = (elem) => {
+  return Array.prototype.filter.call(elem.parentNode.children, function (sibling) {
+    return sibling !== elem;
+  });
+};
+
+// Opens the given collapsible
+const setCollapsibleContentToTrueHeight = (collapsible) => {
+  for (const sibling of getSiblings(collapsible)) {
+    if (sibling.classList.contains('content')) {
+      sibling.style.maxHeight = sibling.scrollHeight + 'px';
+    }
+  }
+};
+
+// Closes the given collapsible
+const setCollapsibleContentHeightToZero = (collapsible) => {
+  for (const sibling of getSiblings(collapsible)) {
+    if (sibling.classList.contains('content')) {
+      sibling.style.maxHeight = 0;
+    }
+  }
+};
+
+// Toggles a collapsible on an event trigger
+const collapseToggle = (event) => {
+  const collapsible = event.currentTarget;
+  collapsible.classList.toggle('collapsed');
+  if (collapsible.classList.contains('collapsed')) {
+    setCollapsibleContentHeightToZero(collapsible);
+  } else {
+    setCollapsibleContentToTrueHeight(collapsible);
+  }
+};
 
 /**
  * End Helper Functions
  * Begin Main Functions
- * 
-*/
+ *
+ */
 
 // Build the nav dynamically
-const frag = document.createDocumentFragment();
-const sections = document.querySelectorAll("section");
 for (const section of sections) {
-    let text = section.getAttribute("data-nav");
-    let li = document.createElement("li");
-    li.innerText = text;
-    li.className = "menu__link";
-    li.setAttribute("for-section", section.getAttribute("id"));
-    frag.appendChild(li);
+  const text = section.getAttribute('data-nav');
+  const li = document.createElement('li');
+  li.innerText = text;
+  li.className = 'menu__link';
+  li.setAttribute('for-section', section.getAttribute('id'));
+  frag.appendChild(li);
 }
-frag.firstChild.classList.add("active-menu-link");
-const navList = document.querySelector("#navbar__list");
+frag.firstChild.classList.add('active-menu-link');
 navList.appendChild(frag);
 
-const headerHeight = document.querySelector(".page__header").offsetHeight;
-let centerOfViewYCoordinate;
+// Initialize active view horizontal line
 calculateCurrentlyActiveViewYCoordinate();
-
-// Add class 'active' to section when near top of viewport
-function calculateCurrentlyActiveViewYCoordinate() {
-    centerOfViewYCoordinate = Math.round((window.innerHeight - headerHeight)/2 + headerHeight);
-}
-
-function calculateActiveSection() {
-    let activeSection = sections[0];
-    for (const section of sections) {
-        if (centerOfViewYCoordinate > section.getBoundingClientRect().y) {
-            activeSection = section;
-        }
-    }
-    if (activeSection !== document.querySelector("section.your-active-class")) {
-        document.querySelector("section.your-active-class").classList.remove("your-active-class");
-        activeSection.classList.add("your-active-class");
-        document.querySelector(".active-menu-link").classList.remove("active-menu-link");
-        document.querySelector(`[for-section=${activeSection.id}]`).classList.add("active-menu-link");
-    }
-}
-
-window.addEventListener('resize', function() {
-    calculateCenterOfMainYCoordinate();
-    calculateActiveSection();
-});
-
-function onScroll() {
-    calculateActiveSection();
-    displayNavBar();
-}
-
-window.addEventListener('scroll', function() {
-    calculateActiveSection();
-    displayNavBar();
-});
-
-
-let timeoutId;
-function displayNavBar() {
-    console.log("in displayNavBar");
-    clearTimeout(timeoutId);
-    let navBar = document.querySelector(".navbar__menu");
-    navBar.style.maxHeight = navBar.scrollHeight + "px";
-    timeoutId = setTimeout(function() {
-            navBar.style.maxHeight = 0;
-        }, 3000);
-}
-
-//collapsibles
-
-function getSiblings(elem) {
-	return Array.prototype.filter.call(elem.parentNode.children, function (sibling) {
-		return sibling !== elem;
-	});
-};
-
-function setCollapsibleContentTrueHeight(collapsible) {
-    for (let sibling of getSiblings(collapsible)) {
-        if (sibling.classList.contains("content")) {
-            sibling.style.maxHeight = sibling.scrollHeight + "px";
-        }
-    }
-}
-
-function setCollapsibleContentHeightToZero(collapsible) {
-    for (let sibling of getSiblings(collapsible)) {
-        if (sibling.classList.contains("content")) {
-            sibling.style.maxHeight = 0;
-        }
-    }
-}
-
-function collapseToggle(event) {
-    let collapsible = event.currentTarget;
-    collapsible.classList.toggle("collapsed");
-    if (collapsible.classList.contains("collapsed")) {
-        setCollapsibleContentHeightToZero(collapsible);
-    } else {
-        setCollapsibleContentTrueHeight(collapsible);
-    }
-}
-
-const collapsibles = document.querySelectorAll(".collapsible");
-for (let collapsible of collapsibles) {
-    setCollapsibleContentTrueHeight(collapsible);
-    collapsible.addEventListener("click", collapseToggle)
-}
-
-// Scroll to anchor ID using scrollTO event
-//TODO: should I use let or const here?
-for (const navElement of navList.children) {
-    navElement.addEventListener('click', function () {
-        document.querySelector(`#${navElement.getAttribute("for-section")}`).scrollIntoView();
-        window.scrollBy(0, -1 * document.querySelector(".navbar__menu").scrollHeight)
-    });
-}
 
 /**
  * End Main Functions
  * Begin Events
- * 
-*/
+ *
+ */
 
-// Build menu 
+// Recalculate active elements when resizing window
+window.addEventListener('resize', function () {
+  calculateCurrentlyActiveViewYCoordinate();
+  calculateActiveSection();
+});
 
-// Scroll to section on link click
+// Recalculate active elements and display the nav bar when scrolling
+window.addEventListener('scroll', function () {
+  calculateActiveSection();
+  displayNavBar();
+});
 
-// Set sections as active
+// Show/hide sections when the header is clicked
+for (const collapsible of collapsibles) {
+  setCollapsibleContentToTrueHeight(collapsible);
+  collapsible.addEventListener('click', collapseToggle);
+}
 
-
+// Scroll to section when nav bar list element is clicked
+for (const navElement of navList.children) {
+  navElement.addEventListener('click', function () {
+    document.querySelector(`#${navElement.getAttribute('for-section')}`).scrollIntoView();
+    window.scrollBy(0, -1 * document.querySelector('.navbar__menu').scrollHeight);
+  });
+}
