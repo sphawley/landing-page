@@ -17,9 +17,8 @@
  * Define Global Variables
  * 
 */
-const headerHeight = document.querySelector(".page__header").offsetHeight;
-let centerOfViewYCoordinate;
-calculateCenterOfViewYCoordinate();
+
+
 /**
  * End Global Variables
  * Start Helper Functions
@@ -49,6 +48,10 @@ frag.firstChild.classList.add("active-menu-link");
 const navList = document.querySelector("#navbar__list");
 navList.appendChild(frag);
 
+const headerHeight = document.querySelector(".page__header").offsetHeight;
+let centerOfViewYCoordinate;
+calculateCenterOfViewYCoordinate();
+
 // Add class 'active' to section when near top of viewport
 function calculateCenterOfViewYCoordinate() {
     centerOfViewYCoordinate = Math.round((window.innerHeight - headerHeight)/2 + headerHeight);
@@ -74,9 +77,25 @@ window.addEventListener('resize', function() {
     calculateActiveSection();
 });
 
+function onScroll() {
+    calculateActiveSection();
+    displayNavBar();
+}
+
 window.addEventListener('scroll', function() {
     calculateActiveSection();
+    displayNavBar();
 });
+
+
+let timeoutId;
+function displayNavBar() {
+    clearTimeout(timeoutId);
+    document.querySelector(".navbar__menu").classList.remove("hide");
+    timeoutId = setTimeout(function() {
+            document.querySelector(".navbar__menu").classList.add("hide");
+        }, 3000);
+}
 
 // Scroll to anchor ID using scrollTO event
 //TODO: should I use let or const here?

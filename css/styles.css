@@ -64,6 +64,10 @@ section {
 /* ---- Module Rules ---- */
 
 /* Navigation Styles*/
+.navbar__menu.hide {
+    display: none;
+}
+
 .navbar__menu ul {
     padding-left: 0;
     margin: 0;
