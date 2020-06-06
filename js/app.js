@@ -54,7 +54,7 @@ calculateCurrentlyActiveViewYCoordinate();
 
 // Add class 'active' to section when near top of viewport
 function calculateCurrentlyActiveViewYCoordinate() {
-    centerOfViewYCoordinate = Math.round((window.innerHeight - headerHeight)/4 + headerHeight);
+    centerOfViewYCoordinate = Math.round((window.innerHeight - headerHeight)/2 + headerHeight);
 }
 
 function calculateActiveSection() {
@@ -144,7 +144,7 @@ for (let collapsible of collapsibles) {
 for (const navElement of navList.children) {
     navElement.addEventListener('click', function () {
         document.querySelector(`#${navElement.getAttribute("for-section")}`).scrollIntoView();
-        window.scrollBy(0, -1 * headerHeight)
+        window.scrollBy(0, -1 * document.querySelector(".navbar__menu").scrollHeight)
     });
 }
 

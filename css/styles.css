@@ -66,6 +66,7 @@ section {
 .navbar__menu {
     overflow: hidden;
     transition: max-height 0.2s ease-out;
+    max-height: 0;
 }
 
 .navbar__menu ul {
