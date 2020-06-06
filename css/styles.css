@@ -57,7 +57,6 @@ main {
 
 section {
     position: relative;
-    min-height: 80vh;
 }
 
 
@@ -96,6 +95,40 @@ section {
     background: #222;
     color: #fff;
     transition: ease 0.3s all;
+}
+
+.collapsible {
+    cursor: pointer;
+}
+
+.collapsible.collapsible--left:hover {
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0) 20%, rgba(0, 0, 0, .5));
+}
+
+.collapsible.collapsible--right:hover {
+    background: linear-gradient(-90deg, rgba(0, 0, 0, 0) 20%, rgba(0, 0, 0, .5));
+}
+
+.collapsible.collapsible--left:after {
+    content: "\2212";
+    float: right;
+    margin-right: 10px;
+}
+
+.collapsible.collapsible--right:after {
+    content: "\2212";
+    float: left;
+    margin-left: 10px;
+}
+
+.collapsible.collapsible--left.collapsed:after,
+.collapsible.collapsible--right.collapsed:after {
+    content: "\002B";
+}
+
+.content {
+    overflow: hidden;
+    transition: max-height 0.4s ease-out;
 }
 
 /* Header Styles */
@@ -204,8 +237,7 @@ section:nth-of-type(3n + 1) .landing__container::after {
 /* Section Active Styles */
 /* Note: your-active-class class is applied through javascript. You should update the class here and in the index.html to what you set in your javascript file.  */
 section.your-active-class {
-    background: rgb(0, 0, 0);
-    background: linear-gradient(0deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0) 100%);
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.3) 25%, rgba(0, 0, 0, 0) 100%);
 }
 
 section.your-active-class .landing__container::before {

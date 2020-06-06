@@ -50,11 +50,11 @@ navList.appendChild(frag);
 
 const headerHeight = document.querySelector(".page__header").offsetHeight;
 let centerOfViewYCoordinate;
-calculateCenterOfViewYCoordinate();
+calculateCurrentlyActiveViewYCoordinate();
 
 // Add class 'active' to section when near top of viewport
-function calculateCenterOfViewYCoordinate() {
-    centerOfViewYCoordinate = Math.round((window.innerHeight - headerHeight)/2 + headerHeight);
+function calculateCurrentlyActiveViewYCoordinate() {
+    centerOfViewYCoordinate = Math.round((window.innerHeight - headerHeight)/4 + headerHeight);
 }
 
 function calculateActiveSection() {
@@ -95,6 +95,46 @@ function displayNavBar() {
     timeoutId = setTimeout(function() {
             document.querySelector(".navbar__menu").classList.add("hide");
         }, 3000);
+}
+
+//collapsibles
+
+function getSiblings(elem) {
+	return Array.prototype.filter.call(elem.parentNode.children, function (sibling) {
+		return sibling !== elem;
+	});
+};
+
+function setCollapsibleContentTrueHeight(collapsible) {
+    for (let sibling of getSiblings(collapsible)) {
+        if (sibling.classList.contains("content")) {
+            sibling.style.maxHeight = sibling.scrollHeight + "px";
+        }
+    }
+}
+
+function setCollapsibleContentHeightToZero(collapsible) {
+    for (let sibling of getSiblings(collapsible)) {
+        if (sibling.classList.contains("content")) {
+            sibling.style.maxHeight = 0;
+        }
+    }
+}
+
+function collapseToggle(event) {
+    let collapsible = event.currentTarget;
+    collapsible.classList.toggle("collapsed");
+    if (collapsible.classList.contains("collapsed")) {
+        setCollapsibleContentHeightToZero(collapsible);
+    } else {
+        setCollapsibleContentTrueHeight(collapsible);
+    }
+}
+
+const collapsibles = document.querySelectorAll(".collapsible");
+for (let collapsible of collapsibles) {
+    setCollapsibleContentTrueHeight(collapsible);
+    collapsible.addEventListener("click", collapseToggle)
 }
 
 // Scroll to anchor ID using scrollTO event
