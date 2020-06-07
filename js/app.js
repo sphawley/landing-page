@@ -58,14 +58,14 @@ const displayNavBar = () => {
   clearTimeout(timeoutId);
   const navBar = document.querySelector('.navbar__menu');
   navBar.style.maxHeight = navBar.scrollHeight + 'px';
-  timeoutId = setTimeout(function () {
+  timeoutId = setTimeout(() => {
     navBar.style.maxHeight = 0;
   }, 3000);
 };
 
 // Get all siblings of elem
 const getSiblings = (elem) => {
-  return Array.prototype.filter.call(elem.parentNode.children, function (sibling) {
+  return Array.prototype.filter.call(elem.parentNode.children, (sibling) => {
     return sibling !== elem;
   });
 };
@@ -127,26 +127,28 @@ calculateCurrentlyActiveViewYCoordinate();
  */
 
 // Recalculate active elements when resizing window
-window.addEventListener('resize', function () {
+window.addEventListener('resize', () => {
   calculateCurrentlyActiveViewYCoordinate();
   calculateActiveSection();
 });
 
 // Recalculate active elements and display the nav bar when scrolling
-window.addEventListener('scroll', function () {
+window.addEventListener('scroll', () => {
   calculateActiveSection();
   displayNavBar();
 });
 
 // Show/hide sections when the header is clicked
-for (const collapsible of collapsibles) {
-  setCollapsibleContentToTrueHeight(collapsible);
-  collapsible.addEventListener('click', collapseToggle);
-}
+window.addEventListener('load', () => {
+  for (const collapsible of collapsibles) {
+    setCollapsibleContentToTrueHeight(collapsible);
+    collapsible.addEventListener('click', collapseToggle);
+  }
+});
 
 // Scroll to section when nav bar list element is clicked
 for (const navElement of navList.children) {
-  navElement.addEventListener('click', function () {
+  navElement.addEventListener('click', () => {
     document.querySelector(`#${navElement.getAttribute('for-section')}`).scrollIntoView();
     window.scrollBy(0, -1 * document.querySelector('.navbar__menu').scrollHeight);
   });
