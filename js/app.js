@@ -34,7 +34,7 @@ const collapsibles = document.querySelectorAll('.collapsible');
 
 // Set the active view horizontal line to halfway down the view after the header
 const calculateCurrentlyActiveViewYCoordinate = () => {
-  centerOfViewYCoordinate = Math.round((window.innerHeight - headerHeight) / 2 + headerHeight);
+  centerOfViewYCoordinate = Math.round((window.innerHeight - headerHeight) / 4 + headerHeight);
 };
 
 // Calculate and set the active section and corresponding menu link
@@ -150,6 +150,8 @@ window.addEventListener('load', () => {
 for (const navElement of navList.children) {
   navElement.addEventListener('click', () => {
     document.querySelector(`#${navElement.getAttribute('for-section')}`).scrollIntoView();
-    window.scrollBy(0, -1 * document.querySelector('.navbar__menu').scrollHeight);
+    if (window.scrollTop() + window.height() !== document.height()) {
+      window.scrollBy(0, -1 * document.querySelector('.navbar__menu').scrollHeight);
+    }
   });
 }
